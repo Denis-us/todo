@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
+
 class TaskController extends Controller
 {
     public function allTasks()
@@ -28,7 +29,11 @@ class TaskController extends Controller
             'description' => $request->input('description'),
         ]);
 
-        return redirect('/');
+        return response()->json([
+            'id' => $task->id,
+            'description' => $request->input('description'),
+            'completed' => null
+        ]);
     }
 
     public function updateTask(Request $request)
@@ -41,7 +46,7 @@ class TaskController extends Controller
 
         $task->save();
 
-        return redirect('/');
+        return response()->json(['id' => $task->id]);
     }
 
     public function deleteTask(Request $request)
@@ -50,10 +55,8 @@ class TaskController extends Controller
 
         $task = Task::findOrFail($id);
 
-        $task->completed = now();
-
         $task->delete();
 
-        return redirect('/');
+        return response()->json(['id' => $task->id]);
     }
 }
